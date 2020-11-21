@@ -1,0 +1,24 @@
+{% extends "blog/base.html" %}
+{% block content %}
+<article class="media content-section">
+    <div class="media-body">
+        <div class="article-metadata">
+            <legend class="border-bottom mb-4"> Details of <b>{{ object.name }} </b> address</legend>
+            <a class="mr-2" href="{% url 'route-addresses' address.route_name %}">Route: {{ object.route_name }} </a>
+            <br>
+            <small class="text-muted">Click on the route to see all addresses added to it. </small>
+
+        </div>
+        <p><b>City:</b> {{ object.city }}</p>
+        <p><b>Area: </b> {{ object.area }}</p>
+        <p class="text-muted">Is Initial Location: {{object.make_initial_location}}</p>
+        {% if object.username == user %}
+        <div>
+            <a class="btn btn-secondary btn-sm mt-1 mb-1" href="{% url 'address-update' object.id %}"> Update</a>
+            <a class="btn btn-danger btn-sm mt-1 mb-1" href="{% url 'address-delete' object.id %}">Delete</a>
+        </div>
+        {% endif %}
+    </div>
+
+</article>
+{% endblock content %}

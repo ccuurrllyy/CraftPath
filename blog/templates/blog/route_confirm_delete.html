@@ -1,0 +1,12 @@
+{% extends "blog/base.html" %}
+{% load static %}
+{% block content %}
+<form action="" method="POST">
+    <legend class="border-bottom mb-4">Delete Route</legend>
+    {% csrf_token %}
+    <h2> Are you sure you want to delete the route "{{ object.title }}"?</h2>
+    <h2 class="alert alert-danger">Warning: Deleting a route will automatically delete all the addresses that have been added to it.</h2>
+    <button class="btn btn-outline-danger" type="submit"> Yes, Delete</button>
+    <a class="btn btn-outline-secondary" href="{% url 'route-detail' object.id %}"> Cancel</a>
+</form>
+{% endblock %}

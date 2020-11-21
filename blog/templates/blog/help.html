@@ -1,0 +1,134 @@
+{% extends "blog/base.html" %}
+{% block content %}
+<style>
+.accordion {
+  background-color: #eee;
+  color: #113;
+  cursor: pointer;
+  padding: 22px;
+  width: 100%;
+  border: none;
+  text-align: left;
+  outline: none;
+  font-size: 15px;
+  transition: 0.4s;
+}
+
+.active, .accordion:hover {
+  background-color: #d45812;
+}
+
+.accordion:after {
+  content: '\002B';
+  color: #777;
+  font-weight: bold;
+  float: right;
+  margin-left: 5px;
+}
+
+.active:after {
+  content: "\2212";
+}
+
+.panel {
+  padding: 0 18px;
+  background-color: white;
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.3s ease-out;
+}
+</style>
+<legend class="border-bottom mb-4">FAQs</legend>
+<p>We've shared some of the most frequently used questions to help you out!</p>
+<div class="cd-faq__items">
+    <ul id="basic" class="cd-faq__group">
+        <li class="cd-faq__title"><h5>Account</h5></li>
+        <button class="accordion">How do I change my password?</button>
+        <div class="panel">
+            <p>insert text here.
+            </p>
+
+        </div>
+
+        <button class="accordion">How do I sign up?</button>
+        <div class="panel">
+            <p>insert text here.</p>
+        </div>
+
+
+        <button class="accordion">How do I change my account settings?</button>
+        <div class="panel">
+            <p>insert text here.</p>
+        </div>
+    </ul>
+</div>
+
+<br>
+<div class="cd-faq__items">
+    <ul id="basic2" class="cd-faq__group">
+        <li class="cd-faq__title"><h5>Routes</h5></li>
+        <button class="accordion">What is a route?
+        </button>
+        <div class="panel">
+            <p>insert text here.</p>
+        </div>
+
+        <button class="accordion">How to create a route?</button>
+        <div class="panel">
+            <p>insert text here.</p>
+        </div>
+
+        <button class="accordion">How to edit a route?</button>
+        <div class="panel">
+            <p>*inster text here*</p>
+        </div>
+
+        <button class="accordion">How to delete a route?</button>
+        <div class="panel">
+            <p>*insert text here*</p>
+        </div>
+    </ul>
+</div>
+<br>
+<div class="cd-faq__items">
+    <ul id="basic2" class="cd-faq__group">
+        <li class="cd-faq__title"><h5>Addresses</h5></li>
+        <button class="accordion">What is an address?
+        </button>
+        <div class="panel">
+            <p>insert text here.</p>
+        </div>
+
+        <button class="accordion">How to add an address to a route?</button>
+        <div class="panel">
+            <p>insert text here.</p>
+        </div>
+
+        <button class="accordion">How to delete an address?</button>
+        <div class="panel">
+            <p>*insert text here*</p>
+        </div>
+    </ul>
+</div>
+<script>
+var acc = document.getElementsByClassName("accordion");
+var i;
+
+for (i = 0; i < acc.length; i++) {
+  acc[i].addEventListener("click", function() {
+    this.classList.toggle("active");
+    var panel = this.nextElementSibling;
+    if (panel.style.maxHeight) {
+      panel.style.maxHeight = null;
+    } else {
+      panel.style.maxHeight = panel.scrollHeight + "px";
+    }
+  });
+}
+
+
+</script>
+
+</body>
+</html>
+{% endblock content %}

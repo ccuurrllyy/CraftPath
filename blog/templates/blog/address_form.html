@@ -1,0 +1,113 @@
+<!doctype html>
+<html lang="en">
+{% load static %}
+{% load crispy_forms_tags %}
+<!DOCTYPE html>
+<html>
+<head>
+
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+          integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+
+    <link rel="stylesheet" type="text/css" href="{% static 'blog/main.css' %}">
+    {% if title %}
+    <title>Craft Path - {{ title }}</title>
+    {% else %}
+    <title>Craft Path</title>
+    {% endif %}
+</head>
+<body bgcolor="#cbd5db">
+<header class="site-header">
+    <nav class="navbar navbar-expand-md navbar-dark bg-steel fixed-top">
+        <div class="container">
+            <a class="navbar-brand mr-4" href="#" style="color:#04323f">Craft Path <img
+                    src="{% static 'images/small-logo2.png' %}" style="border-radius: 0%"></a>
+
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarToggle"
+                    aria-controls="navbarToggle" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarToggle">
+                <div class="navbar-nav mr-auto">
+                    {% if user.is_authenticated %}
+                    <a class="nav-item nav-link" href="{% url 'blog-main' %}">All Routes</a>
+                    <a class="nav-item nav-link" href="{% url 'user-routes' user.username %}">My Routes</a>
+                    <a class="nav-item nav-link" href="{%url 'route-create' %}">New Route</a>
+                    {% else %}
+                    <a class="nav-item nav-link" href="{% url 'blog-home' %}">Home Page</a>
+                    {% endif %}
+                </div>
+                <!-- Navbar Right Side -->
+                <div class="navbar-nav ">
+                    {% if user.is_authenticated %}
+                    <a class="nav-item nav-link" href="{% url 'profile' %}">Profile</a>
+                    <a class="nav-item nav-link" href="{% url 'logout' %}">Logout</a>
+                    {% else %}
+                    <a class="nav-item nav-link" href="{% url 'login' %}">Login</a>
+                    <a class="nav-item nav-link" href="{% url 'register' %}">Register</a>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </nav>
+</header>
+
+<main role="main" class="container">
+    <div class="row">
+        <div class="col-md-8">
+            {% if messages %}
+            {% for message in messages %}
+            <div class="alert alert-{{ message.tags }}">
+                {{ message }}
+            </div>
+            {% endfor %}
+            {% endif %}
+            <legend class="border-bottom mb-4"> Please fill out the details of the Address </b></legend>
+
+            <form method="post" id="placeForm" data-areas-url="{% url 'ajax_load_areas' %}">
+                {% csrf_token %}
+                {{ form|crispy}}
+                <br>
+                <br>
+                 <button class="button" type="submit"> Submit</button>
+            </form>
+        </div>
+    </div>
+</main>
+
+<script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+<script>
+    $("#id_city").change(function () {
+        const url = $("#placeForm").attr("data-areas-url");  // get the url of the `load_areas` view
+        const cityId = $(this).val();  // get the selected city ID from the HTML input
+
+        $.ajax({                       // initialize an AJAX request
+            url: url,                    // set the url of the request (= /persons/ajax/load-areas/ )
+            data: {
+                'city_id': cityId       // add the city id to the GET parameters
+            },
+            success: function (data) {   // `data` is the return of the `load_areas` view function
+                $("#id_area").html(data);  // replace the contents of the area input with the data that came from the server
+                /*
+
+                let html_data = '<option value="">---------</option>';
+                data.forEach(function (area) {
+                    html_data += `<option value="${area.id}">${area.name}</option>`
+                });
+                console.log(html_data);
+                $("#id_area").html(html_data);
+
+                */
+            }
+        });
+
+    });
+</script>
+
+</body>
+</html>
