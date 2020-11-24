@@ -153,3 +153,10 @@ def load_areas(request):
     areas = Area.objects.filter(city_id=city_id).all()
     return render(request,'blog/area_dropdown_list_options.html', {'areas': areas})
     # return JsonResponse(list(cities.values('id', 'name')), safe=False)
+
+class SortedRouteListView(LoginRequiredMixin, ListView):
+    model = Route
+    template_name = 'blog/sorted_routes.html'
+    context_object_name = 'routes'
+    ordering = ['-date_posted']
+    paginate_by = 10

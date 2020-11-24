@@ -45,8 +45,9 @@
 
 
 
+
 </style>
-{% if page_obj.paginator.count > 0 %}
+{% if page_obj.paginator.count > 2 and page_obj.paginator.count < 50 %}
 <article class="media content-section">
     <div class="media-body">
         <div class="article-metadata">
@@ -62,12 +63,10 @@
                     <div class="panel">
                         <p><b>City:</b> {{ address.city }}</p>
                         <p><b>Area:</b> {{ address.area }}</p>
-                        <p><b>Longitude:</b> {{ address.longitude }}</p>
-
-                        <p><b>Latitude:</b> {{ address.latitude }}</p>
+                        <p><b>Location:</b> {{ address.location }}</p>
                         <!--                        <p><b>Street Number: </b> {{ address.street_number }}</p>-->
                         <!--                        <p><b>Street Name:</b> {{ address.street_name }}</p>-->
-
+                        <p class="text-muted">Is Initial Location: {{address.make_initial_location}}</p>
                         <!--                        <div class="custom-control custom-radio">-->
                         <!--                            <input type="radio" class="custom-control-input" id="defaultUnchecked"-->
                         <!--                                   name="defaultExampleRadios">-->
@@ -91,7 +90,7 @@
         <a class="btn btn-secondary btn-sm mt-2 mb-1" href="{% url 'address-create' %}"
            style="background-color: #04323f; position:relative; left:450px;">Add New Address</a>
         <a class="btn btn-secondary btn-sm mt-2 mb-1" href="#"
-           style="background-color: #04323f; position:relative; left:450px;">Sort Locations</a>
+           style="background-color: #04323f; position:relative; left:450px;">Sort Addresses</a>
     </div>
 
 </article>
@@ -99,12 +98,103 @@
 <article class="media content-section">
     <div class="media-body">
         <div class="article-metadata">
-            <h1> Sorry there are no added addresses in this route!</h1>
+            <h1> Sorry there are no added addresses in {{view.kwargs.route_name}}!</h1>
             <a class="btn btn-secondary btn-sm mt-2 mb-1" href="{% url 'address-create' %}"
                style="background-color: #04323f; position:relative; left:550px;">Add New Address</a>
         </div>
+    </div>
 </article>
-{% endif %} {% endif %}
+
+{% else %}{% if page_obj.paginator.count == 50 %}
+<article class="media content-section">
+    <div class="media-body">
+        <div class="article-metadata">
+            <legend class="border-bottom mb-4">Addresses in {{view.kwargs.route_name}}: {{ page_obj.paginator.count }}
+                addresses<h6
+                        class="text-muted"> Click on + to view address details. </h6></legend>
+
+            {% for address in addresses %}
+
+            <div class="cd-faq__items">
+                <ul id="basic" class="cd-faq__group">
+                    <button class="accordion">Address Name: {{address.name }}</button>
+                    <div class="panel">
+                        <p><b>City:</b> {{ address.city }}</p>
+                        <p><b>Area:</b> {{ address.area }}</p>
+                        <p><b>Location:</b> {{ address.location }}</p>
+                        <!--                        <p><b>Street Number: </b> {{ address.street_number }}</p>-->
+                        <!--                        <p><b>Street Name:</b> {{ address.street_name }}</p>-->
+                        <p class="text-muted">Is Initial Location: {{address.make_initial_location}}</p>
+                        <!--                        <div class="custom-control custom-radio">-->
+                        <!--                            <input type="radio" class="custom-control-input" id="defaultUnchecked"-->
+                        <!--                                   name="defaultExampleRadios">-->
+                        <!--                            <label class="custom-control-label" for="defaultUnchecked">Make Initial location</label>-->
+                        <!--                        </div>-->
+                        {% if address.username == user %}
+                        <div>
+                            <a class="btn btn-secondary btn-sm mt-1 mb-1" href="{% url 'address-update' address.id %}"
+                               style="background-color: #04323f"> Update</a>
+                            <a class="btn btn-danger btn-sm mt-1 mb-1" href="{% url 'address-delete' address.id %}">Delete</a>
+                        </div>
+                    </div>
+                    {% endif %}
+                </ul>
+            </div>
+
+            {% endfor %}
+
+        </div>
+        <h5> You have reached the maximum amount of addresses per route: 50. Cannot add more.</h5>
+        <a class="btn btn-secondary btn-sm mt-2 mb-1" href="#"
+           style="background-color: #04323f; position:relative; left:550px;">Sort Locations</a>
+    </div>
+
+</article>
+{% else %}{% if page_obj.paginator.count == 1 %}
+<article class="media content-section">
+    <div class="media-body">
+        <div class="article-metadata">
+            <legend class="border-bottom mb-4">Addresses in {{view.kwargs.route_name}}: {{ page_obj.paginator.count }}
+                addresses<h6
+                        class="text-muted"> Click on + to view address details. </h6></legend>
+
+            {% for address in addresses %}
+
+            <div class="cd-faq__items">
+                <ul id="basic" class="cd-faq__group">
+                    <button class="accordion">Address Name: {{address.name }}</button>
+                    <div class="panel">
+                        <p><b>City:</b> {{ address.city }}</p>
+                        <p><b>Area:</b> {{ address.area }}</p>
+                        <p><b>Location:</b> {{ address.location }}</p>
+                        <!--                        <p><b>Street Number: </b> {{ address.street_number }}</p>-->
+                        <!--                        <p><b>Street Name:</b> {{ address.street_name }}</p>-->
+                        <p class="text-muted">Is Initial Location: {{address.make_initial_location}}</p>
+                        <!--                        <div class="custom-control custom-radio">-->
+                        <!--                            <input type="radio" class="custom-control-input" id="defaultUnchecked"-->
+                        <!--                                   name="defaultExampleRadios">-->
+                        <!--                            <label class="custom-control-label" for="defaultUnchecked">Make Initial location</label>-->
+                        <!--                        </div>-->
+                        {% if address.username == user %}
+                        <div>
+                            <a class="btn btn-secondary btn-sm mt-1 mb-1" href="{% url 'address-update' address.id %}"
+                               style="background-color: #04323f"> Update</a>
+                            <a class="btn btn-danger btn-sm mt-1 mb-1" href="{% url 'address-delete' address.id %}">Delete</a>
+                        </div>
+                    </div>
+                    {% endif %}
+                </ul>
+            </div>
+
+            {% endfor %}
+
+        </div>
+        <a class="btn btn-secondary btn-sm mt-2 mb-1" href="{% url 'address-create' %}"
+               style="background-color: #04323f; position:relative; left:550px;">Add New Address</a>
+    </div>
+
+</article>
+{% endif %} {% endif %} {% endif %} {% endif %}
 
 
 <script>
@@ -122,19 +212,6 @@ for (i = 0; i < acc.length; i++) {
     }
   });
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 </script>
 {% endblock content %}

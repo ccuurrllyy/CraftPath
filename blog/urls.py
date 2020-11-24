@@ -10,7 +10,8 @@ from .views import (
     AddressDetailView,
     AddressUpdateVeiw,
     AddressDeleteView,
-    RouteAddressListView
+    RouteAddressListView,
+    SortedRouteListView
 )
 from . import views
 from django.contrib.staticfiles.urls import staticfiles_urlpatterns
@@ -32,6 +33,7 @@ urlpatterns = [
     path('address/<int:pk>/update', AddressUpdateVeiw.as_view(), name='address-update'),
     path('address/<int:pk>/delete', AddressDeleteView.as_view(), name='address-delete'),
     path('route/<str:route_name>/', RouteAddressListView.as_view(), name='route-addresses'),
+    path('sorted-routes/', SortedRouteListView.as_view(), name='sorted-routes'),
     path('ajax/load-areas/', views.load_areas, name='ajax_load_areas'),  # AJAX
 
 ]

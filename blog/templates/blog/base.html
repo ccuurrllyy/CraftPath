@@ -36,6 +36,7 @@
                     <a class="nav-item nav-link" href="{% url 'blog-main' %}">All Routes</a>
                     <a class="nav-item nav-link" href="{% url 'user-routes' user.username %}">My Routes</a>
                     <a class="nav-item nav-link" href="{%url 'route-create' %}">New Route</a>
+                     <a class="nav-item nav-link" href="{%url 'sorted-routes' %}">Route Results</a>
                     {% else %}
                     <a class="nav-item nav-link" href="{% url 'blog-home' %}">Home Page</a>
                     {% endif %}
