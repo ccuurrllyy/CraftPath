@@ -7,7 +7,7 @@
     <div class="media-body">
         <div class="article-metadata">
 
-            <a class="mr-2" href="{% url 'route-addresses' address.route_name %}">Route: {{ address.route_name.title }} </a>
+            <a class="mr-2" href="{% url 'route-addresses' address.route %}">Route: {{ address.route.title }} </a>
             <small class="text-muted">Address number: {{ address.id }}</small>
         </div>
         <h2><a class="article-title" href="{% url 'address-detail' address.id %}">Name: {{ address.name }}</a></h2>

@@ -6,6 +6,6 @@
     {% csrf_token %}
     <h2> Are you sure you want to delete the Address? "{{ object.name }}"?</h2>
     <button class="btn btn-outline-danger" type="submit"> Yes, Delete</button>
-    <a class="btn btn-outline-secondary" href="{% url 'route-addresses' object.route_name.title %}"> Cancel</a>
+    <a class="btn btn-outline-secondary" href="{% url 'route-addresses' object.route.title %}"> Cancel</a>
 </form>
 {% endblock %}

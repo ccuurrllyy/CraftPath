@@ -4,13 +4,14 @@
     <div class="media-body">
         <div class="article-metadata">
             <legend class="border-bottom mb-4"> Details of <b>{{ object.name }} </b> address</legend>
-            <a class="mr-2" href="{% url 'route-addresses' address.route_name %}">Route: {{ object.route_name }} </a>
+            <a class="mr-2" href="{% url 'route-addresses' address.route %}">Route: {{ object.route }} </a>
             <br>
             <small class="text-muted">Click on the route to see all addresses added to it. </small>
 
         </div>
-        <p><b>City:</b> {{ object.city }}</p>
-        <p><b>Area: </b> {{ object.area }}</p>
+        <!--<p><b>City:</b> {{ object.city }}</p>-->
+        <!--<p><b>Area: </b> {{ object.area }}</p>-->
+         <p><b>Location:</b> ( {{ address.location.x }} , {{address.location.y}} ) </p>
         <p class="text-muted">Is Initial Location: {{object.make_initial_location}}</p>
         {% if object.username == user %}
         <div>

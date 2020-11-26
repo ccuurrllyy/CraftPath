@@ -2,6 +2,9 @@ from django.db import models
 from django.utils import timezone
 from django.urls import reverse
 from django.conf import settings
+import googlemaps
+from django.contrib.gis.db import models
+from django.contrib.gis.geos import Point
 
 class IntegerRangeField(models.IntegerField):
     def __init__(self, verbose_name=None, name=None, min_value=None, max_value=None, **kwargs):
@@ -33,7 +36,7 @@ class City(models.Model):
 
 
 class Area(models.Model):
-    city= models.ForeignKey(City, on_delete=models.CASCADE)
+    city = models.ForeignKey(City, on_delete=models.CASCADE)
     name = models.CharField(max_length=40)
 
     def __str__(self):
@@ -41,13 +44,11 @@ class Area(models.Model):
 
 
 class Address(models.Model):
-    route_name = models.ForeignKey(Route, on_delete=models.CASCADE)
+    route = models.ForeignKey(Route, on_delete=models.CASCADE)
     name = models.CharField(max_length=30)
-    city = models.ForeignKey(City, on_delete=models.SET_NULL, blank=True, null=True)
-    area = models.ForeignKey(Area, on_delete=models.SET_NULL, blank=True, null=True)
-    latitude= models.FloatField(max_length=30, default=None,blank=True, null=True)
-    longitude= models.FloatField(max_length=30, default=None,blank=True,null=True)
+    location = models.PointField(max_length=40, srid=4326, blank=True, null=True)
     username = models.ForeignKey(settings.AUTH_USER_MODEL, default=1, on_delete=models.CASCADE)
+    make_initial_location = models.BooleanField(default=False, blank=True)
 
     def __str__(self):
         return self.name

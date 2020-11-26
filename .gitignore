@@ -1,0 +1,10 @@
+*.pyc
+venv
+.idea/*
+secrets.json
+.DS_Store
+.python-versions
+.vscode/*
+static
+.python-version
+migrations_old

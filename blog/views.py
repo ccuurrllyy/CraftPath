@@ -1,6 +1,10 @@
+from django.core.exceptions import MultipleObjectsReturned
+from django.http import Http404
 from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.contrib.messages.views import SuccessMessageMixin
+from mapwidgets import GooglePointFieldWidget
+
 from .models import Route, Address,Area
 from django.contrib.auth.models import User
 from django.views.generic import (
@@ -11,6 +15,8 @@ from django.views.generic import (
     DeleteView)
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
+from .forms import AddressCreationForm
+
 def home(request):
     return render(request, 'blog/home.html', {'title': 'Home'})
 
@@ -99,7 +105,7 @@ class AddressDetailView(LoginRequiredMixin, DetailView):
     template_name = 'blog/address_detail.html'
 
 
-from .forms import AddressCreationForm
+
 @login_required
 def AddressCreateVeiw(request):
     form = AddressCreationForm()
@@ -112,9 +118,10 @@ def AddressCreateVeiw(request):
             return redirect(instance)
     return render(request, 'blog/address_form.html', {'form': form})
 
-class AddressUpdateVeiw(LoginRequiredMixin, UserPassesTestMixin,SuccessMessageMixin, UpdateView):
+
+class AddressUpdateVeiw(LoginRequiredMixin, UserPassesTestMixin, SuccessMessageMixin, UpdateView):
+    form_class = AddressCreationForm
     model = Address
-    fields = [ 'route_name','name', 'city','area',]
     success_message = "Your address has been successfully added!"
 
     def form_valid(self, form):
@@ -144,8 +151,9 @@ class RouteAddressListView(LoginRequiredMixin, ListView):
     paginate_by = 100
 
     def get_queryset(self):
-        var = get_object_or_404(Route,title=self.kwargs.get('route_name'))
-        return Address.objects.filter(route_name=var)
+        var = get_object_or_404(Route, title=self.kwargs.get('route_name'))
+        addresses = Address.objects.filter(route=var)
+        return addresses
 
 # AJAX
 def load_areas(request):

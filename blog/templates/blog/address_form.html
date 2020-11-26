@@ -15,11 +15,15 @@
           integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
 
     <link rel="stylesheet" type="text/css" href="{% static 'blog/main.css' %}">
+    <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+
     {% if title %}
     <title>Craft Path - {{ title }}</title>
     {% else %}
     <title>Craft Path</title>
     {% endif %}
+
+    {{ form.media }}
 </head>
 <body bgcolor="#cbd5db">
 <header class="site-header">
@@ -80,7 +84,6 @@
     </div>
 </main>
 
-<script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
 <script>
     $("#id_city").change(function () {
         const url = $("#placeForm").attr("data-areas-url");  // get the url of the `load_areas` view

@@ -12,21 +12,33 @@ https://docs.djangoproject.com/en/3.1/ref/settings/
 
 from pathlib import Path
 import os
+import json
+from craftpath.tools import get_secret
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
+try:
+    with open('%s/%s' % (BASE_DIR, 'secrets.json')) as f:
+        SECRETS = json.loads(f.read())
+except IOError:
+    SECRETS = dict()
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/3.1/howto/deployment/checklist/
+
+SERVER_TYPE = get_secret('SERVER_TYPE', SECRETS, 'LOCAL')
 
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = '5px#-d^gx=ufx9a4m!02mdez_=&7!#8riq^^eomizd(#s_1lyb'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = get_secret('DEBUG', SECRETS, False)
 
-ALLOWED_HOSTS = []
+if DEBUG:
+    ALLOWED_HOSTS = ['*']
+else:
+    ALLOWED_HOSTS = []
 
 
 
@@ -42,8 +54,11 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'django.contrib.gis',
     'rest_framework',
     'import_export',
+    'widget_tweaks',
+    'mapwidgets',
 ]
 
 MIDDLEWARE = [
@@ -80,12 +95,24 @@ WSGI_APPLICATION = 'craftpath.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/3.1/ref/settings/#databases
 
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.sqlite3',
+#         'NAME': str(BASE_DIR / 'db.sqlite3'),
+#     }
+# }
+
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': str(BASE_DIR / 'db.sqlite3'),
+        'default': {
+            # 'ENGINE': 'django.contrib.gis.db.backends.mysql',
+            'ENGINE': 'django.contrib.gis.db.backends.postgis',
+            'NAME': get_secret('DATABASE_NAME', SECRETS),
+            'USER': get_secret('DATABASE_USER', SECRETS),
+            'PASSWORD': get_secret('DATABASE_PASSWORD', SECRETS),
+            'HOST': get_secret('DATABASE_HOST', SECRETS),
+            'PORT': '',
+        }
     }
-}
 
 
 # Password validation
@@ -124,6 +151,7 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.1/howto/static-files/
 
+STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 STATIC_URL = '/static/'
 STATICFILES_DIR = [
     os.path.join(BASE_DIR, 'static')
@@ -139,6 +167,18 @@ EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
+
+GOOGLE_GEOCODE_API_KEY = get_secret('GOOGLE_GEOCODE_API_KEY', SECRETS)
+
+MAP_WIDGETS = {
+    "GooglePointFieldWidget": (
+        ("zoom", 15),
+        ("mapCenterLocationName", "Dubai"),
+        ("GooglePlaceAutocompleteOptions", {'componentRestrictions': {'country': 'ae'}}),
+        ("markerFitZoom", 12),
+    ),
+    "GOOGLE_MAP_API_KEY": GOOGLE_GEOCODE_API_KEY
+}
 
 #these dont work!
 #EMAIL_HOST_USER = os.environ.get('EMAIL_USER')
