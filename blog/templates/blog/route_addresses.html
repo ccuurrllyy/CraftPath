@@ -37,21 +37,13 @@
   overflow: hidden;
   transition: max-height 0.3s ease-out;
 }
-
-
-
-
-
-
-
-
-
 </style>
+
 {% if page_obj.paginator.count > 1 and page_obj.paginator.count < 50 %}
 <article class="media content-section">
     <div class="media-body">
         <div class="article-metadata">
-            <legend class="border-bottom mb-4">Addresses in {{view.kwargs.route}}: {{ page_obj.paginator.count }}
+            <legend class="border-bottom mb-4">Addresses in <b>{{ addresses.0.route }}</b>: {{ page_obj.paginator.count }}
                 addresses<h6
                         class="text-muted"> Click on + to view address details. </h6></legend>
 
@@ -59,19 +51,10 @@
 
             <div class="cd-faq__items">
                 <ul id="basic" class="cd-faq__group">
-                    <button class="accordion">Address Name: {{address.name }}</button>
+                    <button class="accordion">Address Name: {{address.name }} {% if address.make_initial_location %} <b class="text-success">(Initial Location)</b> {% endif %}</button>
                     <div class="panel">
-                        <!--<p><b>City:</b> {{ address.city }}</p>-->
-                        <!--<p><b>Area:</b> {{ address.area }}</p>-->
                         <p><b>Location:</b> ( {{ address.location.x }} , {{address.location.y}} ) </p>
-                        <!--                        <p><b>Street Number: </b> {{ address.street_number }}</p>-->
-                        <!--                        <p><b>Street Name:</b> {{ address.street_name }}</p>-->
                         <p class="text-muted">Is Initial Location: {{address.make_initial_location}}</p>
-                        <!--                        <div class="custom-control custom-radio">-->
-                        <!--                            <input type="radio" class="custom-control-input" id="defaultUnchecked"-->
-                        <!--                                   name="defaultExampleRadios">-->
-                        <!--                            <label class="custom-control-label" for="defaultUnchecked">Make Initial location</label>-->
-                        <!--                        </div>-->
                         {% if address.username == user %}
                         <div>
                             <a class="btn btn-secondary btn-sm mt-1 mb-1" href="{% url 'address-update' address.id %}"
@@ -90,8 +73,10 @@
         </div>
         <a class="btn btn-secondary btn-sm mt-2 mb-1" href="{% url 'address-create' %}"
            style="background-color: #04323f; position:relative; left:450px;">Add New Address</a>
-        <a class="btn btn-secondary btn-sm mt-2 mb-1" href="#"
-           style="background-color: #04323f; position:relative; left:450px;">Sort Addresses</a>
+        {%  if  addresses.count > 2 %}
+            <a class="btn btn-secondary btn-sm mt-2 mb-1" href="#"
+           style="background-color: #04323f; position:relative; left:450px;" onclick="sortAddresses()">Sort Addresses</a>
+        {% endif %}
     </div>
 
 </article>
@@ -110,7 +95,7 @@
 <article class="media content-section">
     <div class="media-body">
         <div class="article-metadata">
-            <legend class="border-bottom mb-4">Addresses in {{view.kwargs.route}}: {{ page_obj.paginator.count }}
+            <legend class="border-bottom mb-4">Addresses in  <b>{{ addresses.0.route }}</b>: {{ page_obj.paginator.count }}
                 addresses<h6
                         class="text-muted"> Click on + to view address details. </h6></legend>
 
@@ -118,19 +103,10 @@
 
             <div class="cd-faq__items">
                 <ul id="basic" class="cd-faq__group">
-                    <button class="accordion">Address Name: {{address.name }}</button>
+                    <button class="accordion">Address Name: {{address.name }} {% if address.make_initial_location %} <b class="text-success">(Initial Location_</b> {% endif %}</button>
                     <div class="panel">
-                        <!--<p><b>City:</b> {{ address.city }}</p>-->
-                        <!--<p><b>Area:</b> {{ address.area }}</p>-->
                         <p><b>Location:</b> ( {{ address.location.x }} , {{address.location.y}} ) </p>
-                        <!--                        <p><b>Street Number: </b> {{ address.street_number }}</p>-->
-                        <!--                        <p><b>Street Name:</b> {{ address.street_name }}</p>-->
                         <p class="text-muted">Is Initial Location: {{address.make_initial_location}}</p>
-                        <!--                        <div class="custom-control custom-radio">-->
-                        <!--                            <input type="radio" class="custom-control-input" id="defaultUnchecked"-->
-                        <!--                                   name="defaultExampleRadios">-->
-                        <!--                            <label class="custom-control-label" for="defaultUnchecked">Make Initial location</label>-->
-                        <!--                        </div>-->
                         {% if address.username == user %}
                         <div>
                             <a class="btn btn-secondary btn-sm mt-1 mb-1" href="{% url 'address-update' address.id %}"
@@ -146,8 +122,10 @@
 
         </div>
         <h5> You have reached the maximum amount of addresses per route: 50. Cannot add more.</h5>
-        <a class="btn btn-secondary btn-sm mt-2 mb-1" href="#"
-           style="background-color: #04323f; position:relative; left:550px;">Sort Locations</a>
+        {%  if  addresses.count > 2 %}
+            <a class="btn btn-secondary btn-sm mt-2 mb-1" href="#"
+           style="background-color: #04323f; position:relative; left:450px;" onclick="sortAddresses()">Sort Addresses</a>
+        {% endif %}
     </div>
 
 </article>
@@ -155,7 +133,7 @@
 <article class="media content-section">
     <div class="media-body">
         <div class="article-metadata">
-            <legend class="border-bottom mb-4">Addresses in {{view.kwargs.route}}: {{ page_obj.paginator.count }}
+            <legend class="border-bottom mb-4">Addresses in  <b>{{ addresses.0.route }}</b>: {{ page_obj.paginator.count }}
                 addresses<h6
                         class="text-muted"> Click on + to view address details. </h6></legend>
 
@@ -163,19 +141,10 @@
 
             <div class="cd-faq__items">
                 <ul id="basic" class="cd-faq__group">
-                    <button class="accordion">Address Name: {{address.name }}</button>
+                    <button class="accordion">Address Name: {{address.name }} {% if address.make_initial_location %} <b class="text-success">(Initial Location_</b> {% endif %}</button>
                     <div class="panel">
-                        <!--<p><b>City:</b> {{ address.city }}</p>-->
-                        <!--<p><b>Area:</b> {{ address.area }}</p>-->
                         <p><b>Location:</b> ( {{ address.location.x }} , {{address.location.y}} ) </p>
-                        <!--                        <p><b>Street Number: </b> {{ address.street_number }}</p>-->
-                        <!--                        <p><b>Street Name:</b> {{ address.street_name }}</p>-->
                         <p class="text-muted">Is Initial Location: {{address.make_initial_location}}</p>
-                        <!--                        <div class="custom-control custom-radio">-->
-                        <!--                            <input type="radio" class="custom-control-input" id="defaultUnchecked"-->
-                        <!--                                   name="defaultExampleRadios">-->
-                        <!--                            <label class="custom-control-label" for="defaultUnchecked">Make Initial location</label>-->
-                        <!--                        </div>-->
                         {% if address.username == user %}
                         <div>
                             <a class="btn btn-secondary btn-sm mt-1 mb-1" href="{% url 'address-update' address.id %}"
@@ -197,6 +166,38 @@
 </article>
 {% endif %} {% endif %} {% endif %} {% endif %}
 
+<script>
+    function sortAddresses() {
+        // Clear old message if exists
+        try {
+            let oldMessage = document.getElementById('sort-addresses-result-message')
+            oldMessage.parentElement.removeChild(oldMessage);
+        } catch{}
+
+        $.ajax({
+            type: 'GET',
+            url: '{% url 'sort-addresses' %}?route={{ addresses.0.route.pk }}',
+            success: function (result) {
+                let mediaBody = document.getElementsByClassName('media-body');
+                let newMessage = createMessage(result.message, result.success)
+                mediaBody[0].appendChild(newMessage)
+            },
+            error: function (error) {
+              console.log(error);
+            }
+        });
+    }
+
+    function createMessage(message, success) {
+        let p = document.createElement("p");
+        p.innerHTML = message;
+        p.classList = (success) ? 'alert alert-success' : 'alert alert-danger';
+        p.style = 'margin-top: 10px';
+        p.id = 'sort-addresses-result-message';
+        return p;
+    }
+
+</script>
 
 <script>
 var acc = document.getElementsByClassName("accordion");

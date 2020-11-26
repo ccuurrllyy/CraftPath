@@ -60,7 +60,16 @@
                 <ul id="basic" class="cd-faq__group">
                     <button class="accordion">Route Name: {{route.title }}</button>
                     <div class="panel">
-                        <p>Results of the Algorithm's output should appear here</p>
+                        {% for location in route.best_paths.all.0.best_path_locations.all %}
+                            {% if forloop.counter < route.best_paths.all.0.best_path_locations.all.count  %}
+                                <label> {{ location.position|add:1 }}. {{ location.address.name }} </label>
+                            {% endif %}
+                        {% endfor %}
+                    <br><br>
+                    <p>Best path: <b>{{ route.best_paths.all.0.best_path_string }}</b></p>
+                    <p>Best path cost: <b>{{ route.best_paths.all.0.best_path_cost }}</b></p>
+                    <p>Last updated: <b>{{ route.best_paths.all.0.updated_at }}</b></p>
+                    </div>
 
                 </ul>
             </div>

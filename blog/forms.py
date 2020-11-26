@@ -1,4 +1,4 @@
-from blog.models import Address, Area
+from blog.models import Address
 from mapwidgets.widgets import GooglePointFieldWidget
 from django import forms
 from django.contrib.gis.forms import PointField

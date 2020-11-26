@@ -73,7 +73,7 @@
             {% endif %}
             <legend class="border-bottom mb-4"> Please fill out the details of the Address </b></legend>
 
-            <form method="post" id="placeForm" data-areas-url="{% url 'ajax_load_areas' %}">
+            <form method="post" id="placeForm">
                 {% csrf_token %}
                 {{ form|crispy}}
                 <br>
@@ -84,33 +84,33 @@
     </div>
 </main>
 
-<script>
-    $("#id_city").change(function () {
-        const url = $("#placeForm").attr("data-areas-url");  // get the url of the `load_areas` view
-        const cityId = $(this).val();  // get the selected city ID from the HTML input
-
-        $.ajax({                       // initialize an AJAX request
-            url: url,                    // set the url of the request (= /persons/ajax/load-areas/ )
-            data: {
-                'city_id': cityId       // add the city id to the GET parameters
-            },
-            success: function (data) {   // `data` is the return of the `load_areas` view function
-                $("#id_area").html(data);  // replace the contents of the area input with the data that came from the server
-                /*
-
-                let html_data = '<option value="">---------</option>';
-                data.forEach(function (area) {
-                    html_data += `<option value="${area.id}">${area.name}</option>`
-                });
-                console.log(html_data);
-                $("#id_area").html(html_data);
-
-                */
-            }
-        });
-
-    });
-</script>
+{#<script>#}
+{#    $("#id_city").change(function () {#}
+{#        const url = $("#placeForm").attr("data-areas-url");  // get the url of the `load_areas` view#}
+{#        const cityId = $(this).val();  // get the selected city ID from the HTML input#}
+{##}
+{#        $.ajax({                       // initialize an AJAX request#}
+{#            url: url,                    // set the url of the request (= /persons/ajax/load-areas/ )#}
+{#            data: {#}
+{#                'city_id': cityId       // add the city id to the GET parameters#}
+{#            },#}
+{#            success: function (data) {   // `data` is the return of the `load_areas` view function#}
+{#                $("#id_area").html(data);  // replace the contents of the area input with the data that came from the server#}
+{#                /*#}
+{##}
+{#                let html_data = '<option value="">---------</option>';#}
+{#                data.forEach(function (area) {#}
+{#                    html_data += `<option value="${area.id}">${area.name}</option>`#}
+{#                });#}
+{#                console.log(html_data);#}
+{#                $("#id_area").html(html_data);#}
+{##}
+{#                */#}
+{#            }#}
+{#        });#}
+{##}
+{#    });#}
+{#</script>#}
 
 </body>
 </html>

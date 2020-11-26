@@ -1,11 +1,10 @@
 from django.core.exceptions import MultipleObjectsReturned
-from django.http import Http404
+from django.http import Http404, JsonResponse
 from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.contrib.messages.views import SuccessMessageMixin
-from mapwidgets import GooglePointFieldWidget
-
-from .models import Route, Address,Area
+from blog.tools import get_best_path_and_cost
+from .models import Route, Address, RouteBestPath, RouteBestPathLocation
 from django.contrib.auth.models import User
 from django.views.generic import (
     ListView,
@@ -16,6 +15,7 @@ from django.views.generic import (
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from .forms import AddressCreationForm
+
 
 def home(request):
     return render(request, 'blog/home.html', {'title': 'Home'})
@@ -71,7 +71,6 @@ class RouteUpdateVeiw(LoginRequiredMixin,UserPassesTestMixin,SuccessMessageMixin
         return False
 
 
-
 class RouteDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
     model = Route
     success_url = '/blog/main/'
@@ -91,8 +90,6 @@ def help(request):
     return render(request, 'blog/help.html', {'title': 'Help'})
 
 
-
-
 class AddressListView(LoginRequiredMixin, ListView):
     model = Address
     template_name = 'blog/addresses.html'
@@ -103,7 +100,6 @@ class AddressListView(LoginRequiredMixin, ListView):
 class AddressDetailView(LoginRequiredMixin, DetailView):
     model = Address
     template_name = 'blog/address_detail.html'
-
 
 
 @login_required
@@ -134,6 +130,7 @@ class AddressUpdateVeiw(LoginRequiredMixin, UserPassesTestMixin, SuccessMessageM
             return True
         return False
 
+
 class AddressDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
     model = Address
     success_url = '/blog/main/'
@@ -144,6 +141,7 @@ class AddressDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
             return True
         return False
 
+
 class RouteAddressListView(LoginRequiredMixin, ListView):
     model = Address
     template_name = 'blog/route_addresses.html'
@@ -152,15 +150,17 @@ class RouteAddressListView(LoginRequiredMixin, ListView):
 
     def get_queryset(self):
         var = get_object_or_404(Route, title=self.kwargs.get('route_name'))
-        addresses = Address.objects.filter(route=var)
+        # Initial location will appear first on the list
+        addresses = Address.objects.filter(route=var).order_by('-make_initial_location')
         return addresses
 
 # AJAX
-def load_areas(request):
-    city_id = request.GET.get('city_id')
-    areas = Area.objects.filter(city_id=city_id).all()
-    return render(request,'blog/area_dropdown_list_options.html', {'areas': areas})
+# def load_areas(request):
+#     city_id = request.GET.get('city_id')
+#     areas = Area.objects.filter(city_id=city_id).all()
+#     return render(request,'blog/area_dropdown_list_options.html', {'areas': areas})
     # return JsonResponse(list(cities.values('id', 'name')), safe=False)
+
 
 class SortedRouteListView(LoginRequiredMixin, ListView):
     model = Route
@@ -168,3 +168,52 @@ class SortedRouteListView(LoginRequiredMixin, ListView):
     context_object_name = 'routes'
     ordering = ['-date_posted']
     paginate_by = 10
+
+
+class RouteBestPathLocations(object):
+    pass
+
+
+def sort_addresses(request):
+    try:
+        route_id = request.GET['route']
+        route = Route.objects.get(pk=route_id)
+    except Exception as e:
+        print("Error", e)
+        return JsonResponse({'success': False, 'message': 'Could not get Route'})
+
+    # The Address marked with 'make_initial_location=True' will be location 1
+    addresses = route.addresses.all().order_by('-make_initial_location')
+
+    best_path, best_path_cost = get_best_path_and_cost(addresses)
+    best_path_list = [str(int(x)) for x in best_path]
+    best_path_string = ', '.join(best_path_list)
+
+    sorted_addresses = []
+    for address_index in best_path_list:
+        sorted_addresses.append(addresses[int(address_index)-1])
+
+    # Try to get existing object to update
+    # Or create a new RouteBestPath
+    try:
+        route_best_path = RouteBestPath.objects.get(route=route_id)
+        route_best_path.addresses.set(addresses)
+        route_best_path.best_path_string = best_path_string
+        route_best_path.best_path_cost = best_path_cost
+        route_best_path.save()
+        try:
+            RouteBestPathLocation.objects.filter(route_best_path=route_best_path).delete()
+        except:
+            pass
+        for pos, addr in enumerate(sorted_addresses):
+            RouteBestPathLocation.objects.create(route_best_path=route_best_path, address=addr, position=pos)
+    except:
+        route_best_path = RouteBestPath.objects.create(route=route, best_path_string=best_path_string, best_path_cost=best_path_cost)
+        route_best_path.addresses.set(addresses)
+        for pos, addr in enumerate(sorted_addresses):
+            RouteBestPathLocation.objects.create(route_best_path=route_best_path, address=addr, position=pos)
+
+
+
+    return JsonResponse({'success': True, 'message': 'Sorting addresses is complete ✅. Check "Route Results " for the results of the algorithm.'})
+
