@@ -1,0 +1,12 @@
+{% extends "blog/base.html" %}
+{% load static %}
+{% block content %}
+    {% if success %}
+        <h2 class="text-center">Congratulations!</h2>
+        <br>
+        <h4 class="text-center">Your CraftPath account is verified.</h4>
+        <h4 class="text-center">You can login <a href="{% url 'login' %}">here</a></h4>
+    {% else %}
+        Error, invalid token!
+    {% endif %}
+{% endblock content %}

@@ -5,6 +5,7 @@ defusedxml==0.6.0
 diff-match-patch==20200713
 Django==2.0.13
 django-crispy-forms==1.9.2
+django-email-verification==0.0.7
 django-import-export==2.4.0
 django-map-widgets==0.1.9
 django-utils-six==2.0
