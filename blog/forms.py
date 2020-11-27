@@ -8,7 +8,7 @@ from django.contrib.gis.forms import PointField, ValidationError
 class AddressCreationForm(forms.ModelForm):
     name = forms.CharField(required=True)
     location = PointField(widget=GooglePointFieldWidget(), required=True)
-    route = forms.ModelChoiceField(queryset=Route.objects.all(), required=True, help_text="Route")
+    route = forms.ModelChoiceField(queryset=Route.objects.all(), required=True)
 
     def clean(self):
         cleaned_data = super().clean()
