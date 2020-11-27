@@ -104,7 +104,7 @@ class AddressDetailView(LoginRequiredMixin, DetailView):
 
 @login_required
 def AddressCreateVeiw(request):
-    form = AddressCreationForm()
+    form = AddressCreationForm(initial={'user': request.user})
     if request.method == 'POST':
         form = AddressCreationForm(request.POST, request.FILES)
         if form.is_valid():
@@ -118,7 +118,7 @@ def AddressCreateVeiw(request):
 class AddressUpdateVeiw(LoginRequiredMixin, UserPassesTestMixin, SuccessMessageMixin, UpdateView):
     form_class = AddressCreationForm
     model = Address
-    success_message = "Your address has been successfully added!"
+    success_message = "Your address has been successfully updated!"
 
     def form_valid(self, form):
         form.instance.username = self.request.user
@@ -151,7 +151,7 @@ class RouteAddressListView(LoginRequiredMixin, ListView):
     def get_queryset(self):
         var = get_object_or_404(Route, title=self.kwargs.get('route_name'))
         # Initial location will appear first on the list
-        addresses = Address.objects.filter(route=var).order_by('-make_initial_location')
+        addresses = Address.objects.filter(route=var).order_by('-make_initial_location', 'id')
         return addresses
 
 # AJAX
@@ -183,7 +183,7 @@ def sort_addresses(request):
         return JsonResponse({'success': False, 'message': 'Could not get Route'})
 
     # The Address marked with 'make_initial_location=True' will be location 1
-    addresses = route.addresses.all().order_by('-make_initial_location')
+    addresses = route.addresses.all().order_by('-make_initial_location', 'id')
 
     best_path, best_path_cost = get_best_path_and_cost(addresses)
     best_path_list = [str(int(x)) for x in best_path]
