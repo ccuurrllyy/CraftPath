@@ -42,6 +42,9 @@ class Address(models.Model):
     def get_absolute_url(self):
         return reverse('address-detail', kwargs={'pk': self.pk})
 
+    class Meta:
+        ordering = ('id',)
+
 
 class RouteBestPath(models.Model):
     route = models.ForeignKey(Route, on_delete=models.CASCADE, related_name="best_paths")
@@ -59,5 +62,8 @@ class RouteBestPathLocation(models.Model):
     address = models.ForeignKey(Address, on_delete=models.CASCADE, blank=True, null=True)
     position = models.IntegerField(blank=True, null=True)
 
+    def __str__(self):
+        return str(self.route_best_path) + ' ' + ' - ' + str(self.position) + '. ' + self.address.name
+
     class Meta:
-        ordering = ['position']
+        ordering = ('position',)
