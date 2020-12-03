@@ -20,7 +20,6 @@ class Route(models.Model):
     username = models.ForeignKey(settings.AUTH_USER_MODEL, default=1, on_delete=models.CASCADE)
     title = models.CharField(max_length=100)
     date_posted = models.DateTimeField(default=timezone.now, blank=True, null=True)
-    number_of_locations = IntegerRangeField(min_value=2, max_value=50, default=None, blank=True, null=True)
 
     def __str__(self):
         return self.title
@@ -51,7 +50,7 @@ class RouteBestPath(models.Model):
     addresses = models.ManyToManyField(Address, blank=True)
     best_path_string = models.CharField(max_length=100, blank=True, null=True)
     best_path_cost = models.FloatField(blank=True, null=True)
-    updated_at = models.DateTimeField(auto_now=True)
+    updated_at = models.DateTimeField(default=timezone.now)
 
     def __str__(self):
         return 'Best Path: ' + self.route.title + ' - ' + self.best_path_string + ' - ' + str(self.best_path_cost)

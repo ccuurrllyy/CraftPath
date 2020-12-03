@@ -2,12 +2,21 @@ from django import forms
 from django.contrib.auth.models import User
 from django.contrib.auth.forms import UserCreationForm
 from django_email_verification import sendConfirm
-
+from django.contrib.gis.forms import ValidationError
 
 class UserRegisterForm(UserCreationForm):
     email = forms.EmailField(required=True)
     first_name = forms.CharField(required=True)
     last_name = forms.CharField(required=True)
+
+    def clean(self):
+        email = self.cleaned_data.get('email')
+        if User.objects.filter(email=email).exists():
+            raise ValidationError("Email already exists, please try another email.")
+        username = self.cleaned_data.get('username')
+        if User.objects.filter(username=username).exists():
+            raise ValidationError("Username already taken, please try another one. ")
+        return self.cleaned_data
 
 
     class Meta:
@@ -46,3 +55,11 @@ class UserUpdateForm(forms.ModelForm):
             'email',
         ]
 
+    def clean(self):
+        email = self.cleaned_data.get('email')
+        if User.objects.all().exclude(pk=self.instance.pk).filter(email=email).exists():
+            raise ValidationError("Email already exists, please try another email")
+        username = self.cleaned_data.get('username')
+        if User.objects.all().exclude(pk=self.instance.pk).filter(username=username).exists():
+            raise ValidationError("Username already taken, please try another one.")
+        return self.cleaned_data

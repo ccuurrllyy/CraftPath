@@ -56,7 +56,6 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'django.contrib.gis',
     'django_email_verification',
-    'rest_framework',
     'import_export',
     'widget_tweaks',
     'mapwidgets',
@@ -153,7 +152,7 @@ STATICFILES_DIR = [
 MEDIA_URL = '/images/'
 CRISPY_TEMPLATE_PACK = 'bootstrap4'
 
-LOGIN_REDIRECT_URL = 'blog-main'
+LOGIN_REDIRECT_URL = 'sorted-routes'
 LOGIN_URL = 'login'
 
 GOOGLE_GEOCODE_API_KEY = get_secret('GOOGLE_GEOCODE_API_KEY', SECRETS)
@@ -167,20 +166,16 @@ MAP_WIDGETS = {
     ),
     "GOOGLE_MAP_API_KEY": GOOGLE_GEOCODE_API_KEY
 }
-
+TIME_ZONE = 'Asia/Dubai'
 EMAIL_ACTIVE_FIELD = 'is_active'
 EMAIL_SERVER = get_secret('EMAIL_SERVER', SECRETS, "smtp.gmail.com")
 EMAIL_PORT = 587
 EMAIL_FROM_ADDRESS = get_secret('FROM_EMAIL', SECRETS, 'noreply@example.com')
 EMAIL_ADDRESS = get_secret('EMAIL_ADDRESS', SECRETS, 'noreply@example.com')
 EMAIL_PASSWORD = get_secret('EMAIL_PASSWORD', SECRETS,  '')
-EMAIL_MAIL_SUBJECT = 'CraftPath | Confirm your email'
+EMAIL_MAIL_SUBJECT = 'Verify your CraftPath Account'
 EMAIL_MAIL_HTML = os.path.join(BASE_DIR, 'users/templates/users/confirmation_email.html')
 EMAIL_MAIL_PLAIN = os.path.join(BASE_DIR, 'users/templates/users/confirmation_email_plain.txt')
 EMAIL_PAGE_TEMPLATE = os.path.join(BASE_DIR, 'users/templates/users/email_confirmation_page.html')
 EMAIL_PAGE_DOMAIN = get_secret('PAGE_DOMAIN', SECRETS, 'http://127.0.0.1:8000')
-
-
-#these dont work!
-#EMAIL_HOST_USER = os.environ.get('EMAIL_USER')
-#EMAIL_HOST_PASSWORD = os.environ.get('EMAIL_PASS')
+ACCOUNT_UNIQUE_EMAIL = True

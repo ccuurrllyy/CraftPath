@@ -45,6 +45,7 @@
 
 
 
+
 </style>
 {% if page_obj.paginator.count > 0 %}
 <article class="media content-section">
@@ -61,30 +62,34 @@
                     <button class="accordion">Route Name: {{route.title }}</button>
                     <div class="panel">
                         {% for location in route.best_paths.all.0.best_path_locations.all %}
-                            {% if forloop.counter < route.best_paths.all.0.best_path_locations.all.count  %}
-                                <label> {{ location.position|add:1 }}. {{ location.address.name }} </label>
-                            {% endif %}
+                        {% if forloop.counter < route.best_paths.all.0.best_path_locations.all.count %}
+                        <label> {{ location.position|add:1 }}. {{ location.address.name }} </label>
+                        {% endif %}
                         {% endfor %}
-                    <br><br>
-                    <p>Best path: <b>{{ route.best_paths.all.0.best_path_string }}</b></p>
-                    <p>Best path cost: <b>{{ route.best_paths.all.0.best_path_cost }}</b></p>
-                    <p>Last updated: <b>{{ route.best_paths.all.0.updated_at }}</b></p>
+                        <br><br>
+                        <br>
+                        <p>Best path: <b>{{ route.best_paths.all.0.best_path_string }}</b></p>
+                        <p>Distance of best path: <b>{{ route.best_paths.all.0.best_path_cost }} meters </b></p>
+                        <p>Last updated: <b>{{ route.best_paths.all.0.updated_at }}</b></p>
                     </div>
 
                 </ul>
-            </div>
 
+            </div>
+            <br>
 
             {% endfor %}
+            <a class="btn btn-secondary btn-sm mt-2 mb-1" href="{% url 'route-create' %}"
+               style="background-color: #04323f; position:relative; left:550px;">Create New Route</a>
 
 </article>
 {% else %}{% if page_obj.paginator.count == 0 %}
 <article class="media content-section">
     <div class="media-body">
         <div class="article-metadata">
-            <h1> Sorry there are no added addresses in this route!</h1>
-            <a class="btn btn-secondary btn-sm mt-2 mb-1" href="{% url 'address-create' %}"
-               style="background-color: #04323f; position:relative; left:550px;">Add New Address</a>
+            <h1> Sorry there are no sorted routes!</h1>
+            <a class="btn btn-secondary btn-sm mt-2 mb-1" href="{% url 'route-create' %}"
+               style="background-color: #04323f; position:relative; left:550px;">Create New Route</a>
         </div>
 </article>
 {% endif %} {% endif %}
@@ -105,6 +110,7 @@ for (i = 0; i < acc.length; i++) {
     }
   });
 }
+
 
 
 

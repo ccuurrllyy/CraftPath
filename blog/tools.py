@@ -9,8 +9,7 @@ def get_best_path_and_cost(addresses):
     best_path, cost_of_best_path = route_algorithm(distances_array)
     return best_path, cost_of_best_path
 
-
-def create_distances_array(addresses):
+def create_distances_array(addresses): #function for creating thre distance
     distances_array = []
     for origin in addresses:
         origin_param = str(origin.location.y) + "," + str(origin.location.x)
@@ -21,10 +20,12 @@ def create_distances_array(addresses):
 
             destinations_param += str(destination.location.y) + "," + str(destination.location.x)
 
+        # print(origin_param, destinations_param)
         origin_array = get_google_distance_matrix_results(origin_param, destinations_param)
         distances_array.append(origin_array)
-
+    print(distances_array)
     return distances_array
+
 
 
 def get_google_distance_matrix_results(origin, destinations):
@@ -158,4 +159,5 @@ def route_algorithm(distances_array):
     print('best path :', best_route)
     cost_of_best_path = float(dist_min_cost[0]) + d[int(best_route[-2]) - 1, 0]
     print('cost of the best path', cost_of_best_path)
+    print(best_route)
     return best_route, cost_of_best_path

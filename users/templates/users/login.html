@@ -8,13 +8,10 @@
     {{ form|crispy}}
     <button class="button" type="submit"> Login</button>
 
-
+<div class="border-top pt-3">
     <small class="text-muted">
         Don't Have An Account? <a class="ml-2" href="{% url 'register' %}">Register Now</a>
-    </small>
-     <div>
-    <small class="text-muted ml-2">
-        <a href="{% url 'password_reset' %}"> Forgot Password?</a>
     </small></div>
+     <div>
 </form>
 {% endblock %}

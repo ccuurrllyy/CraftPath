@@ -39,7 +39,7 @@
 }
 </style>
 
-{% if page_obj.paginator.count > 1 and page_obj.paginator.count < 50 %}
+{% if page_obj.paginator.count > 0 and page_obj.paginator.count < 50 %}
 <article class="media content-section">
     <div class="media-body">
         <div class="article-metadata">
@@ -65,106 +65,55 @@
                     {% endif %}
                 </ul>
             </div>
-            <br><br>
-
+            <br>
 
             {% endfor %}
 
-        </div>
+        {% if addresses.count > 2 and addresses.count < 50 %}
         <a class="btn btn-secondary btn-sm mt-2 mb-1" href="{% url 'address-create' %}"
            style="background-color: #04323f; position:relative; left:450px;">Add New Address</a>
-        {%  if  addresses.count > 2 %}
-            <a class="btn btn-secondary btn-sm mt-2 mb-1" href="#"
+        <a class="btn btn-secondary btn-sm mt-2 mb-1" href="#"
            style="background-color: #04323f; position:relative; left:450px;" onclick="sortAddresses()">Sort Addresses</a>
-        {% endif %}
-    </div>
 
-</article>
-{% else %}{% if page_obj.paginator.count == 0 %}
-<article class="media content-section">
-    <div class="media-body">
-        <div class="article-metadata">
-            <h1> Sorry there are no added addresses in {{view.kwargs.route}}!</h1>
-            <a class="btn btn-secondary btn-sm mt-2 mb-1" href="{% url 'address-create' %}"
-               style="background-color: #04323f; position:relative; left:550px;">Add New Address</a>
-        </div>
-    </div>
-</article>
-
-{% else %}{% if page_obj.paginator.count == 50 %}
-<article class="media content-section">
-    <div class="media-body">
-        <div class="article-metadata">
-            <legend class="border-bottom mb-4">Addresses in  <b>{{ addresses.0.route }}</b>: {{ page_obj.paginator.count }}
-                addresses<h6
-                        class="text-muted"> Click on + to view address details. </h6></legend>
-
-            {% for address in addresses %}
-
-            <div class="cd-faq__items">
-                <ul id="basic" class="cd-faq__group">
-                    <button class="accordion">Address Name: {{address.name }} {% if address.make_initial_location %} <b class="text-success">(Initial Location)</b> {% endif %}</button>
-                    <div class="panel">
-                        <p><b>Location:</b> ( {{ address.location.x }} , {{address.location.y}} ) </p>
-                        <p class="text-muted">Is Initial Location: {{address.make_initial_location}}</p>
-                        {% if address.username == user %}
-                        <div>
-                            <a class="btn btn-secondary btn-sm mt-1 mb-1" href="{% url 'address-update' address.id %}"
-                               style="background-color: #04323f"> Update</a>
-                            <a class="btn btn-danger btn-sm mt-1 mb-1" href="{% url 'address-delete' address.id %}">Delete</a>
-                        </div>
-                    </div>
-                    {% endif %}
-                </ul>
-            </div>
-
-            {% endfor %}
-
-        </div>
+        {% else %}
+        {% if addresses.count == 50 %}
         <h5> You have reached the maximum amount of addresses per route: 50. Cannot add more.</h5>
-        {%  if  addresses.count > 2 %}
-            <a class="btn btn-secondary btn-sm mt-2 mb-1" href="#"
+        <a class="btn btn-secondary btn-sm mt-2 mb-1" href="#"
            style="background-color: #04323f; position:relative; left:450px;" onclick="sortAddresses()">Sort Addresses</a>
-        {% endif %}
-    </div>
 
-</article>
-{% else %}{% if page_obj.paginator.count == 1 %}
-<article class="media content-section">
-    <div class="media-body">
-        <div class="article-metadata">
-            <legend class="border-bottom mb-4">Addresses in  <b>{{ addresses.0.route }}</b>: {{ page_obj.paginator.count }}
-                addresses<h6
-                        class="text-muted"> Click on + to view address details. </h6></legend>
-
-            {% for address in addresses %}
-
-            <div class="cd-faq__items">
-                <ul id="basic" class="cd-faq__group">
-                    <button class="accordion">Address Name: {{address.name }} {% if address.make_initial_location %} <b class="text-success">(Initial Location)</b> {% endif %}</button>
-                    <div class="panel">
-                        <p><b>Location:</b> ( {{ address.location.x }} , {{address.location.y}} ) </p>
-                        <p class="text-muted">Is Initial Location: {{address.make_initial_location}}</p>
-                        {% if address.username == user %}
-                        <div>
-                            <a class="btn btn-secondary btn-sm mt-1 mb-1" href="{% url 'address-update' address.id %}"
-                               style="background-color: #04323f"> Update</a>
-                            <a class="btn btn-danger btn-sm mt-1 mb-1" href="{% url 'address-delete' address.id %}">Delete</a>
-                        </div>
-                    </div>
-                    {% endif %}
-                </ul>
-            </div>
-
-            {% endfor %}
-
-        </div>
+        {% else %}
+        {% if addresses.count == 1 %}
         <a class="btn btn-secondary btn-sm mt-2 mb-1" href="{% url 'address-create' %}"
-               style="background-color: #04323f; position:relative; left:550px;">Add New Address</a>
-    </div>
+       style="background-color: #04323f; position:relative; left:550px;">Add New Address</a>
+            {% else %}
+        {% if addresses.count == 2 %}
+        <a class="btn btn-secondary btn-sm mt-2 mb-1" href="{% url 'address-create' %}"
+       style="background-color: #04323f; position:relative; left:550px;">Add New Address</a>
+            {% endif %} {% endif %}{% endif %}
+            {% endif %}
 
+    </div>
+    </div>
 </article>
-{% endif %} {% endif %} {% endif %} {% endif %}
+
+
+    {% else %}{% if addresses.count == 0 %}
+    <article class="media content-section">
+        <div class="media-body">
+            <div class="article-metadata">
+                <h1> Sorry there are no added addresses in this route!</h1>
+                <a class="btn btn-secondary btn-sm mt-2 mb-1" href="{% url 'address-create' %}"
+                   style="background-color: #04323f; position:relative; left:550px;">Add New Address</a>
+            </div>
+        </div>{% endif %} {% endif %}
+
+    </article>
+
+
+
+
+
+
 
 <script>
     function sortAddresses() {

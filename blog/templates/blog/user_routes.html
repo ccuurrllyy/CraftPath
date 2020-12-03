@@ -41,7 +41,7 @@
 
                 <td>{{ route.username }}</td>
                 <td><a class="article-title" href="{% url 'route-detail' route.id %}">{{ route.title }}</a></td>
-                <td><a class="btn btn-secondary btn-sm mt-1 mb-1" href="{% url 'route-addresses' route.title %}"
+                <td><a class="btn btn-secondary btn-sm mt-1 mb-1" href="{% url 'route-addresses' route.id %}"
                        style="background-color: #04323f;">View Addresses</a>
                     <a class="btn btn-secondary btn-sm mt-1 mb-1" href="{% url 'route-detail' route.id %}"
                        style="background-color: #04323f ;">Route Details</a></td>

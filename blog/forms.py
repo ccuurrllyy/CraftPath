@@ -13,19 +13,29 @@ class AddressCreationForm(forms.ModelForm):
     def clean(self):
         cleaned_data = super().clean()
         form_route = self.cleaned_data.get('route')
+        name = self.cleaned_data.get('name')
         make_initial_location = self.cleaned_data.get('make_initial_location')
         location = self.cleaned_data.get('location')
+
         # Check if location exists in this Route
         route = Route.objects.get(pk=form_route.pk)
         if location:
             if route.addresses.all().exclude(pk=self.instance.pk).filter(location=location).exists():
-                raise ValidationError("There is already an address with this location. Please choose another location.")
-            
+                raise ValidationError("There is already an address with this exact location. Please choose another location from the map.")
+        else:
+            raise ValidationError("Please choose a location from the map.")
+
         # Check if there is another address marked with initial location for this route
         if make_initial_location:
             if route.addresses.all().exclude(pk=self.instance.pk).filter(make_initial_location=True).exists():
                 raise ValidationError("There is already an address marked as initial location.")
+
+        # Check if address with the same name has been added before
+        if name:
+            if route.addresses.all().exclude(pk=self.instance.pk).filter(name=name).exists():
+                raise ValidationError("There is already an address with that name in your route.")
         return cleaned_data
+
 
     class Meta:
         model = Address
