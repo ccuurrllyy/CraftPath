@@ -41,11 +41,6 @@
 
 
 
-
-
-
-
-
 </style>
 {% if page_obj.paginator.count > 0 %}
 <article class="media content-section">
@@ -63,7 +58,7 @@
                     <div class="panel">
                         {% for location in route.best_paths.all.0.best_path_locations.all %}
                         {% if forloop.counter < route.best_paths.all.0.best_path_locations.all.count %}
-                        <label> {{ location.position|add:1 }}. {{ location.address.name }} </label>
+                        <label> {{ location.position}}. {{ location.address.name }} </label>
                         {% endif %}
                         {% endfor %}
                         <br><br>
@@ -87,13 +82,14 @@
 <article class="media content-section">
     <div class="media-body">
         <div class="article-metadata">
-            <h1> Sorry there are no sorted routes!</h1>
+            <h1> Welcome to CraftPath Team! &#128512;</h1>
+            <h3> Are you ready to start sorting with us?</h3>
+            <h6> Click on the button to create your first Route.</h6>
             <a class="btn btn-secondary btn-sm mt-2 mb-1" href="{% url 'route-create' %}"
                style="background-color: #04323f; position:relative; left:550px;">Create New Route</a>
         </div>
 </article>
 {% endif %} {% endif %}
-
 
 <script>
 var acc = document.getElementsByClassName("accordion");

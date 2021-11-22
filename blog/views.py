@@ -169,19 +169,18 @@ def sort_addresses(request):
     # The Address marked with 'make_initial_location=True' will be location 1
     addresses = route.addresses.all().order_by('-make_initial_location', 'id')
     best_path, best_path_cost = get_best_path_and_cost(addresses) #returns best_path, cost_of_best_path
-    best_path_list = [str(int(x)) for x in best_path]
-    best_path_string = ', '.join(best_path_list)
+    print(best_path)
 
     sorted_addresses = []
-    for address_index in best_path_list:
-        sorted_addresses.append(addresses[int(address_index) - 1])
+    for address_index in best_path:
+        sorted_addresses.append(addresses[int(address_index)])
     print(sorted_addresses)
     # Try to get existing object to update
     # Or create a new RouteBestPath
     try:
         route_best_path = RouteBestPath.objects.get(route=route_id)
         route_best_path.addresses.set(addresses)
-        route_best_path.best_path_string = best_path_string
+        route_best_path.best_path_string = best_path
         route_best_path.best_path_cost = best_path_cost
         route_best_path.save()
         try:
@@ -191,7 +190,7 @@ def sort_addresses(request):
         for pos, addr in enumerate(sorted_addresses): #enumerate is for loop with index
             RouteBestPathLocation.objects.create(route_best_path=route_best_path, address=addr, position=pos)
     except:
-        route_best_path = RouteBestPath.objects.create(route=route, best_path_string=best_path_string,
+        route_best_path = RouteBestPath.objects.create(route=route, best_path_string=best_path,
                                                        best_path_cost=best_path_cost)
         route_best_path.addresses.set(addresses)
         for pos, addr in enumerate(sorted_addresses):

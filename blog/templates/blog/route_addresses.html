@@ -39,13 +39,14 @@
 }
 </style>
 
-{% if page_obj.paginator.count > 0 and page_obj.paginator.count < 50 %}
+{% if page_obj.paginator.count > 0 and page_obj.paginator.count < 25 %}
 <article class="media content-section">
     <div class="media-body">
         <div class="article-metadata">
             <legend class="border-bottom mb-4">Addresses in <b>{{ addresses.0.route }}</b>: {{ page_obj.paginator.count }}
                 addresses<h6
                         class="text-muted"> Click on + to view address details. </h6></legend>
+                       <h6 class="text-muted"> Note: Incase of no address set as initial location, the first address added will be set as initial location automatically. </h6></legend>
 
             {% for address in addresses %}
 
@@ -69,17 +70,17 @@
 
             {% endfor %}
 
-        {% if addresses.count > 2 and addresses.count < 50 %}
+        {% if addresses.count > 2 and addresses.count < 25 %}
         <a class="btn btn-secondary btn-sm mt-2 mb-1" href="{% url 'address-create' %}"
            style="background-color: #04323f; position:relative; left:450px;">Add New Address</a>
         <a class="btn btn-secondary btn-sm mt-2 mb-1" href="#"
            style="background-color: #04323f; position:relative; left:450px;" onclick="sortAddresses()">Sort Addresses</a>
 
         {% else %}
-        {% if addresses.count == 50 %}
-        <h5> You have reached the maximum amount of addresses per route: 50. Cannot add more.</h5>
+        {% if addresses.count == 25 %}
+        <h5> You have reached the maximum amount of addresses per route: 25. Cannot add more.</h5>
         <a class="btn btn-secondary btn-sm mt-2 mb-1" href="#"
-           style="background-color: #04323f; position:relative; left:450px;" onclick="sortAddresses()">Sort Addresses</a>
+           style="background-color: #04323f; position:relative; left:550px;" onclick="sortAddresses()">Sort Addresses</a>
 
         {% else %}
         {% if addresses.count == 1 %}

@@ -55,7 +55,6 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'django.contrib.gis',
-    'django_email_verification',
     'import_export',
     'widget_tweaks',
     'mapwidgets',
@@ -167,6 +166,7 @@ MAP_WIDGETS = {
     "GOOGLE_MAP_API_KEY": GOOGLE_GEOCODE_API_KEY
 }
 TIME_ZONE = 'Asia/Dubai'
+
 EMAIL_ACTIVE_FIELD = 'is_active'
 EMAIL_SERVER = get_secret('EMAIL_SERVER', SECRETS, "smtp.gmail.com")
 EMAIL_PORT = 587
